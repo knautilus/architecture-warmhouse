@@ -1,0 +1,45 @@
+@startuml
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(User, "Пользователь", "Пользователь приложения Теплый дом")
+Person(Admin, "Администратор", "Администратор системы управления Теплый дом")
+
+Container_Boundary(SmartHome, "Система Теплый дом") {
+    Container(WebApp, "Web-приложение", "Веб интерфейс для управления умным домом")
+    Container(MobileApp, "Мобильное приложение", "Мобильное приложение для управления умным домом")
+    Container(ApiGateway, "Api Gateway", "Шлюз для направления запросов на соответствующие сервисы")
+    Container(AdminPanel, "Административная панель", "Позволяет осуществлять администрирование системы")
+    Container(HomeManagement, "Сервис управления домами", "Управляет данными о домах и регистрирует устройства в них")
+    Container(DeviceManagement, "Сервис управления устройствами", "Управляет устройствами")
+    Container(AutomationService, "Сервис автоматизации", "Обрабатывает сценарии автоматизациии и управляет устройствами")
+    Container(TelemetryService, "Сервис телеметрии", "Обрабатывает данные телеметрии, сохраняет их, отдает по запросу")
+    ContainerDb(SmartHomeDb, "SmartHome DB", "PostgreSQL", "Хранит данные о домах, подключенных устройствах, сценариях автоматизации")
+    ContainerDb(TelemetryDb, "Telemetry DB", "Clickhouse", "Хранит данные телеметрии")
+    ContainerQueue(Queue, "Брокер сообщений", "Обмен данными между сервисами")
+}
+
+System_Boundary(House, "Дом") {
+    System_Ext(Sensor, "Датчик")
+    System_Ext(Device, "Контроллер устройства")
+}
+
+Rel(Admin, AdminPanel, "Добавляет в систему новые типы устройств")
+Rel(User, WebApp, "Использует систему")
+Rel(User, MobileApp, "Использует систему")
+Rel(WebApp, ApiGateway, "Отправляет запросы")
+Rel(MobileApp, ApiGateway, "Отправляет запросы")
+Rel(ApiGateway, HomeManagement, "Запрашивает данные о домах, добавляет дома, добавляет устройства в домах")
+Rel(ApiGateway, AutomationService, "Запрашивает сценарии, добавляет новые, шлет команды на управление устройствами")
+Rel(ApiGateway, TelemetryService, "Запрашивает данных телеметрии")
+Rel(AdminPanel, SmartHomeDb, "Читает/записывает данные об устройствах и их типах")
+Rel(HomeManagement, SmartHomeDb, "Читает/записывает данные о домах и устройствах в них")
+Rel(DeviceManagement, SmartHomeDb, "Читает/записывает данные о состоянии устройств")
+Rel(AutomationService, SmartHomeDb, "Читает/записывает данные о сценариях")
+Rel(TelemetryService, TelemetryDb, "Читает/записывает данные телеметрии")
+Rel(AutomationService, Queue, "Отправляет сценарии на исполнение")
+Rel(DeviceManagement, Queue, "Получает сообщения об автоматизации")
+Rel(Sensor, TelemetryService, "Отправляет данные телеметрии")
+Rel(DeviceManagement, Device, "Отправляет команды к устройству")
+
+@enduml

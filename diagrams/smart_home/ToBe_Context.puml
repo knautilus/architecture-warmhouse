@@ -1,0 +1,21 @@
+@startuml
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(User, "Пользователь", "Пользователь приложения Теплый дом")
+Person(Admin, "Администратор", "Администратор системы управления Теплый дом")
+
+System(SmartHome, "Smart Home", "Система управления Теплый дом")
+
+System_Boundary(House, "Дом") {
+    System_Ext(Sensor, "Датчик")
+    System_Ext(Device, "Контроллер устройства")
+}
+
+Rel(Admin, SmartHome, "Добавляет в систему новые типы устройств")
+Rel(User, SmartHome, "Использует систему")
+Rel(Sensor, SmartHome, "Отправка телеметрии")
+Rel(Sensor, SmartHome, "Регистрация датчика при включении")
+Rel(SmartHome, Device, "Управление устройством")
+
+@enduml

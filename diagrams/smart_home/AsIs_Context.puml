@@ -5,7 +5,7 @@
 Person(User, "Пользователь", "Пользователь приложения Теплый дом")
 Person(Specialist, "Специалист", "Специалист по подключению системы отопления в доме к текущей версии системы")
 
-System(SmartHome, "smart home", "Система управления Теплый дом")
+System(SmartHome, "Smart Home", "Система управления Теплый дом")
 
 System_Boundary(House, "Дом") {
     System_Ext(Sensor, "Датчик температуры")
