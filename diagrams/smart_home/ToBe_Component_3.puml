@@ -8,8 +8,8 @@ Container(ApiGateway, "Api Gateway", "Шлюз для направления з�
 
 SystemDb_Ext(SmartHomeDb, "SmartHome DB", "PostgreSQL", "Хранит данные о домах, подключенных устройствах, сценариях автоматизации")
 
-Container_Boundary(HomeManagement, "Сервис управления домами") {
-    Component(HomeController, "HomeController", "Обрабатывает запросы для управления домами")
+Container_Boundary(HouseManagement, "Сервис управления домами") {
+    Component(HouseController, "HouseController", "Обрабатывает запросы для управления домами")
     Component(DeviceController, "DeviceController", "Обрабатывает запросы для управления подключением устройств")
     Component(ServiceLayer, "Слой сервисов", "Бизнес-логика управления домами")
     Component(RepositoryLayer, "Слой репозиториев", "Работа с базой данных")
@@ -17,7 +17,7 @@ Container_Boundary(HomeManagement, "Сервис управления домам
 
 Rel(ApiGateway, HomeController, "Отправляет запросы")
 Rel(ApiGateway, DeviceController, "Отправляет запросы")
-Rel(HomeController, ServiceLayer, "Обращается к бизнес-логике")
+Rel(HouseController, ServiceLayer, "Обращается к бизнес-логике")
 Rel(DeviceController, ServiceLayer, "Обращается к бизнес-логике")
 Rel(ServiceLayer, RepositoryLayer, "Читает и изменяет данные")
 Rel(RepositoryLayer, SmartHomeDb, "Читает и изменяет данные")
