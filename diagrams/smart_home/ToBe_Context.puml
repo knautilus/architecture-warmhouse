@@ -3,9 +3,9 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
 Person(User, "Пользователь", "Пользователь приложения Теплый дом")
-Person(Admin, "Администратор", "Администратор системы управления Теплый дом")
+Person(Admin, "Администратор", "Администратор системы Теплый дом")
 
-System(SmartHome, "Smart Home", "Система управления Теплый дом")
+System(SmartHome, "Smart Home", "Система Теплый дом")
 
 System_Boundary(House, "Дом") {
     System_Ext(Sensor, "Датчик")

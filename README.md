@@ -58,7 +58,13 @@
 
 **Диаграмма компонентов (Components)**
 
-Добавьте диаграмму для каждого из выделенных микросервисов.
+[Визуализация компонентов 1](diagrams/smart_home/ToBe_Component_1.puml)
+
+[Визуализация компонентов 2](diagrams/smart_home/ToBe_Component_2.puml)
+
+[Визуализация компонентов 3](diagrams/smart_home/ToBe_Component_3.puml)
+
+[Визуализация компонентов 4](diagrams/smart_home/ToBe_Component_4.puml)
 
 **Диаграмма кода (Code)**
 

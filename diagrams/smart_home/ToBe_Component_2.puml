@@ -1,0 +1,25 @@
+@startuml
+
+title Диаграмма компонентов: Сервис управления устройствами
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+SystemDb_Ext(SmartHomeDb, "SmartHome DB", "PostgreSQL", "Хранит данные о домах, подключенных устройствах, сценариях автоматизации")
+SystemQueue_Ext(Queue, "Брокер сообщений", "Обмен данными между сервисами")
+System_Ext(Device, "Контроллер устройства")
+
+Container_Boundary(DeviceManagement, "Сервис управления устройствами") {
+    Component(MessageConsumer, "Потребитель сообщений", "Получает сообщения из шины данных")
+    Component(ServiceLayer, "Слой сервисов", "Бизнес-логика управления устройствами")
+    Component(RepositoryLayer, "Слой репозиториев", "Работа с базой данных")
+    Component(DeviceManager, "Слой работы с устройством", "Отправка команд на устройство")
+}
+
+Rel(Queue, MessageConsumer, "Доставляет сообщения")
+Rel(MessageConsumer, ServiceLayer, "Обращается к бизнес-логике")
+Rel(ServiceLayer, RepositoryLayer, "Читает и изменяет данные")
+Rel(ServiceLayer, DeviceManager, "Передает команды для отправки")
+Rel(DeviceManager, Device, "Отправляет команды")
+Rel(RepositoryLayer, SmartHomeDb, "Читает и изменяет данные")
+
+@enduml

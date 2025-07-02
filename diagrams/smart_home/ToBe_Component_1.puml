@@ -1,0 +1,26 @@
+@startuml
+
+title Диаграмма компонентов: Сервис автоматизации
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container(ApiGateway, "Api Gateway", "Шлюз для направления запросов на соответствующие сервисы")
+
+SystemDb_Ext(SmartHomeDb, "SmartHome DB", "PostgreSQL", "Хранит данные о домах, подключенных устройствах, сценариях автоматизации")
+SystemQueue_Ext(Queue, "Брокер сообщений", "Обмен данными между сервисами")
+
+Container_Boundary(AutomationService, "Сервис автоматизации") {
+    Component(ScenarioController, "ScenarioController", "Обрабатывает запросы для управления сценариями автоматизации")
+    Component(ServiceLayer, "Слой сервисов", "Бизнес-логика обработки сценариев автоматизации")
+    Component(RepositoryLayer, "Слой репозиториев", "Работа с базой данных")
+    Component(MessagePublisher, "Издатель сообщений", "Отправлка сообщений в шину данных")
+}
+
+Rel(ApiGateway, ScenarioController, "Отправляет запросы")
+Rel(ScenarioController, ServiceLayer, "Обращается к бизнес-логике")
+Rel(ServiceLayer, RepositoryLayer, "Читает и изменяет данные")
+Rel(ServiceLayer, MessagePublisher, "Передает команды для отправки")
+Rel(MessagePublisher, Queue, "Отправляет сообщения")
+Rel(RepositoryLayer, SmartHomeDb, "Читает и изменяет данные")
+
+@enduml

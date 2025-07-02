@@ -6,10 +6,11 @@ Person(User, "Пользователь", "Пользователь прилож�
 Person(Admin, "Администратор", "Администратор системы управления Теплый дом")
 
 Container_Boundary(SmartHome, "Система Теплый дом") {
+    Container(AdminWebApp, "Web-приложение админки", "Веб интерфейс для админки системы Теплый дом")
     Container(WebApp, "Web-приложение", "Веб интерфейс для управления умным домом")
     Container(MobileApp, "Мобильное приложение", "Мобильное приложение для управления умным домом")
     Container(ApiGateway, "Api Gateway", "Шлюз для направления запросов на соответствующие сервисы")
-    Container(AdminPanel, "Административная панель", "Позволяет осуществлять администрирование системы")
+    Container(AdminPanel, "Сервис администрирования системы", "Позволяет осуществлять администрирование системы")
     Container(HomeManagement, "Сервис управления домами", "Управляет данными о домах и регистрирует устройства в них")
     Container(DeviceManagement, "Сервис управления устройствами", "Управляет устройствами")
     Container(AutomationService, "Сервис автоматизации", "Обрабатывает сценарии автоматизациии и управляет устройствами")
@@ -24,15 +25,17 @@ System_Boundary(House, "Дом") {
     System_Ext(Device, "Контроллер устройства")
 }
 
-Rel(Admin, AdminPanel, "Добавляет в систему новые типы устройств")
+Rel(Admin, AdminWebApp, "Администрирует систему")
+Rel(AdminWebApp, ApiGateway, "Отправляет запросы")
 Rel(User, WebApp, "Использует систему")
 Rel(User, MobileApp, "Использует систему")
 Rel(WebApp, ApiGateway, "Отправляет запросы")
 Rel(MobileApp, ApiGateway, "Отправляет запросы")
+Rel(ApiGateway, AdminPanel, "Запрашивает данные о домах, устройствах, добавляет в систему новые типы устройств")
 Rel(ApiGateway, HomeManagement, "Запрашивает данные о домах, добавляет дома, добавляет устройства в домах")
 Rel(ApiGateway, AutomationService, "Запрашивает сценарии, добавляет новые, шлет команды на управление устройствами")
 Rel(ApiGateway, TelemetryService, "Запрашивает данных телеметрии")
-Rel(AdminPanel, SmartHomeDb, "Читает/записывает данные об устройствах и их типах")
+Rel(AdminPanel, SmartHomeDb, "Читает/записывает данные о домах, устройствах и их типах")
 Rel(HomeManagement, SmartHomeDb, "Читает/записывает данные о домах и устройствах в них")
 Rel(DeviceManagement, SmartHomeDb, "Читает/записывает данные о состоянии устройств")
 Rel(AutomationService, SmartHomeDb, "Читает/записывает данные о сценариях")
