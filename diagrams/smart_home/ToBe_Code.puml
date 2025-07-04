@@ -22,6 +22,7 @@ abstract class Device {
     +string Location
     +string SerialNumber
     +bool IsEnabled
+    +List<DeviceParameter> DeviceParameters
     +{abstract} void Execute(IDeviceCommand command)
 }
 
@@ -38,18 +39,34 @@ class Gate {
 }
 
 interface IDeviceCommand {
+    +string DeviceParameterId
+    +string Value
 }
 
-class HeaterCommand {
+class DeviceParameter {
+    +string Id
+    +string Name
+    +string Description
+    +string ValueType
 }
 
 class LampCommand {
+    +string DeviceParameterId
+    +string Value
 }
 
 class GateCommand {
+    +string DeviceParameterId
+    +string Value
+}
+
+class HeaterCommand {
+    +string DeviceParameterId
+    +string Value
 }
 
 House "1" -- "0..*" Device: has
+Device "1" -- "0..*" DeviceParameter: has
 Device ..> IDeviceCommand: uses
 
 Heater --|> Device: extends

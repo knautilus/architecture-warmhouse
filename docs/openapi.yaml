@@ -6,6 +6,12 @@ info:
 tags:
   - name: houseService
     description: Endpoints dealing with house.
+  - name: deviceService
+    description: Endpoints dealing with device.
+  - name: automationService
+    description: Endpoints dealing with automation.
+  - name: telemetryService
+    description: Endpoints dealing with telemetry.
 paths:
   /houses:
     get:
@@ -88,7 +94,7 @@ paths:
       description: Возвращает список устройств
       operationId: getDevices
       tags:
-        - houseService
+        - deviceService
       parameters:
         - name: houseId
           in: query
@@ -136,7 +142,7 @@ paths:
       description: Регистрирует новое устройство в доме
       operationId: createDevice
       tags:
-        - houseService
+        - deviceService
       requestBody:
         required: true
         content:
@@ -175,7 +181,7 @@ paths:
       - $ref: "#/components/parameters/deviceId"
     get:
       tags:
-        - houseService
+        - deviceService
       summary: Получение устройства по Id
       description: Получает устройство по Id
       operationId: getDeviceById
@@ -214,7 +220,7 @@ paths:
         - BearerJwt: []
     delete:
       tags:
-        - houseService
+        - deviceService
       summary: Удаление устройства
       description: Удаляет устройство по Id
       operationId: deleteDevice
@@ -261,7 +267,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/deviceId"
       tags:
-        - houseService
+        - deviceService
       requestBody:
         required: true
         content:
@@ -301,7 +307,7 @@ paths:
       description: Возвращает список сценариев автоматизации
       operationId: getAutomationScenarios
       tags:
-        - houseService
+        - automationService
       responses:
         "200":
           description: Список сценариев автоматизации
@@ -336,7 +342,7 @@ paths:
       description: Регистрирует новый сценарий автоматизации
       operationId: createAutomationScenario
       tags:
-        - houseService
+        - automationService
       requestBody:
         required: true
         content:
@@ -370,6 +376,59 @@ paths:
                 type: object
       security:
         - BearerJwt: []
+  /telemetry:
+    get:
+      summary: Получить данные телеметрии
+      description: Возвращает данные телеметрии для устройства
+      operationId: getTelemetry
+      tags:
+        - telemetryService
+      security:
+        - BearerJwt: []
+      parameters:
+        - name: deviceId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+            examples:
+              - 0a684668-5a3d-420b-9793-f44fc00ca0bb
+          description: Идентификатор устройства
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+            examples:
+              - 0a684668-5a3d-420b-9793-f44fc00ca0bb
+          description: Тип телеметрии
+      responses:
+        "200":
+          description: Данные телеметрии
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Telemetry"
+        "400":
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Неавторизован
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                type: object
 components:
   schemas:
     House:
@@ -529,44 +588,70 @@ components:
           type: string
           examples: time eq 19:00
         Action:
-          type: object
-          example:
-            TurnOn: "1"
+          $ref: "#/components/schemas/DeviceCommand"
       required:
         - Id
         - DeviceId
         - Name
+        - Trigger
+        - Action
     AutomationScenarioCreateInput:
       type: object
       properties:
         DeviceId:
           type: string
           format: uuid
-          examples:
-            - 0a684668-5a3d-420b-9793-f44fc00ca0bb
+          example: 0a684668-5a3d-420b-9793-f44fc00ca0bb
         Name:
           type: string
-          examples:
-            - Evening Light
+          example: Evening Light
         Trigger:
           type: string
-          examples: time eq 19:00
+          example: time eq 19:00
         Action:
-          type: object
-          example:
-            TurnOn: "1"
+          $ref: "#/components/schemas/DeviceCommand"
       required:
         - DeviceId
         - Name
+        - Trigger
+        - Action
     DeviceCommand:
       type: object
       properties:
-        Parameters:
-          type: object
-          example:
-            Temperature: "25"
+        DeviceParameterId:
+          type: string
+          format: uuid
+          example: 0a684668-5a3d-420b-9793-f44fc00ca0bb
+        Value:
+          type: string
+          example: 25
       required:
-        - Parameters
+        - DeviceParameterId
+        - Value
+    Telemetry:
+      type: object
+      properties:
+        DeviceId:
+          type: string
+          format: uuid
+          example: 0a684668-5a3d-420b-9793-f44fc00ca0bb
+        Type:
+          type: string
+          example: Temperature
+        Data:
+          type: array
+          items:
+            type: object
+            properties:
+              Timestamp:
+                type: string
+                format: date-time
+              Value:
+                type: number
+                format: double
+      required:
+        - DeviceId
+        - Data
   responses:
     Conflict:
       content:

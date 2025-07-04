@@ -42,7 +42,20 @@ entity "AutomationScenario" {
   DeviceId : string <<FK>>
   Name : string
   Trigger : string
-  Action : string
+  Action : DeviceCommand
+}
+
+entity "DeviceParameter" {
+  *Id : string <<PK>>
+  --
+  Name : string
+  Description : string 
+  ValueType : string
+}
+
+entity "DeviceCommand" {
+  DeviceParameterId : string <<FK>>
+  Value : string
 }
 
 entity "TelemetryData" {
@@ -59,5 +72,7 @@ House ||--o{ Device : contains
 DeviceType ||--o{ Device : has
 Device ||--o{ AutomationScenario : has
 Device ||--o{ TelemetryData : produces
+Device ||--o{ DeviceParameter : has
+AutomationScenario ||--|| DeviceCommand : uses
 
 @enduml
