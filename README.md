@@ -42,35 +42,35 @@
 
 ### 5. Визуализация контекста системы — диаграмма С4
 
-[Визуализация контекста монолита](diagrams/smart_home/AsIs_Context.puml)
+[Визуализация контекста монолита](diagrams/AsIs_Context.puml)
 
 # Задание 2. Проектирование микросервисной архитектуры
 
 **Диаграмма контекста (Context)**
 
-[Визуализация контекста](diagrams/smart_home/ToBe_Context.puml)
+[Визуализация контекста](diagrams/ToBe_Context.puml)
 
 **Диаграмма контейнеров (Containers)**
 
-[Визуализация контейнеров](diagrams/smart_home/ToBe_Container.puml)
+[Визуализация контейнеров](diagrams/ToBe_Container.puml)
 
 **Диаграмма компонентов (Components)**
 
-[Визуализация компонентов 1](diagrams/smart_home/ToBe_Component_1.puml)
+[Визуализация компонентов 1](diagrams/ToBe_Component_1.puml)
 
-[Визуализация компонентов 2](diagrams/smart_home/ToBe_Component_2.puml)
+[Визуализация компонентов 2](diagrams/ToBe_Component_2.puml)
 
-[Визуализация компонентов 3](diagrams/smart_home/ToBe_Component_3.puml)
+[Визуализация компонентов 3](diagrams/ToBe_Component_3.puml)
 
-[Визуализация компонентов 4](diagrams/smart_home/ToBe_Component_4.puml)
+[Визуализация компонентов 4](diagrams/ToBe_Component_4.puml)
 
 **Диаграмма кода (Code)**
 
-[Визуализация кода](diagrams/smart_home/ToBe_Code.puml)
+[Визуализация кода](diagrams/ToBe_Code.puml)
 
 # Задание 3. Разработка ER-диаграммы
 
-[ER-диаграмма](diagrams/smart_home/ToBe_ER-diagram.puml)
+[ER-диаграмма](diagrams/ToBe_ER-diagram.puml)
 
 # Задание 4. Создание и документирование API
 
