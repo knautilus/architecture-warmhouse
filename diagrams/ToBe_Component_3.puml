@@ -1,0 +1,25 @@
+@startuml
+
+title Диаграмма компонентов: Сервис управления домами
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container(ApiGateway, "Api Gateway", "Шлюз для направления запросов на соответствующие сервисы")
+
+SystemDb_Ext(SmartHomeDb, "SmartHome DB", "PostgreSQL", "Хранит данные о домах, подключенных устройствах, сценариях автоматизации")
+
+Container_Boundary(HouseManagement, "Сервис управления домами") {
+    Component(HouseController, "HouseController", "Обрабатывает запросы для управления домами")
+    Component(DeviceController, "DeviceController", "Обрабатывает запросы для управления подключением устройств")
+    Component(ServiceLayer, "Слой сервисов", "Бизнес-логика управления домами")
+    Component(RepositoryLayer, "Слой репозиториев", "Работа с базой данных")
+}
+
+Rel(ApiGateway, HomeController, "Отправляет запросы")
+Rel(ApiGateway, DeviceController, "Отправляет запросы")
+Rel(HouseController, ServiceLayer, "Обращается к бизнес-логике")
+Rel(DeviceController, ServiceLayer, "Обращается к бизнес-логике")
+Rel(ServiceLayer, RepositoryLayer, "Читает и изменяет данные")
+Rel(RepositoryLayer, SmartHomeDb, "Читает и изменяет данные")
+
+@enduml

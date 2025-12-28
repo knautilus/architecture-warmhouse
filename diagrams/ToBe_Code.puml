@@ -1,0 +1,80 @@
+@startuml
+
+title Диаграмма кода: Сервис управления домами
+
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4.puml
+
+class House {
+    +string Id
+    +string UserId
+    +string Name
+    +string Address
+    +List<Device> Devices
+    +void AddDevice(Device device)
+    +void RemoveDevice(Device device)
+}
+
+abstract class Device {
+    +string Id
+    +string HouseId
+    +string DeviceTypeId
+    +string Name
+    +string Location
+    +string SerialNumber
+    +bool IsEnabled
+    +List<DeviceParameter> DeviceParameters
+    +{abstract} void Execute(IDeviceCommand command)
+}
+
+class Heater {
+    +void Execute(IDeviceCommand command)
+}
+
+class Lamp {
+    +void Execute(IDeviceCommand command)
+}
+
+class Gate {
+    +void Execute(IDeviceCommand command)
+}
+
+interface IDeviceCommand {
+    +string DeviceParameterId
+    +string Value
+}
+
+class DeviceParameter {
+    +string Id
+    +string Name
+    +string Description
+    +string ValueType
+}
+
+class LampCommand {
+    +string DeviceParameterId
+    +string Value
+}
+
+class GateCommand {
+    +string DeviceParameterId
+    +string Value
+}
+
+class HeaterCommand {
+    +string DeviceParameterId
+    +string Value
+}
+
+House "1" -- "0..*" Device: has
+Device "1" -- "0..*" DeviceParameter: has
+Device ..> IDeviceCommand: uses
+
+Heater --|> Device: extends
+Lamp --|> Device: extends
+Gate --|> Device: extends
+
+HeaterCommand --|> IDeviceCommand: implements
+LampCommand --|> IDeviceCommand: implements
+GateCommand --|> IDeviceCommand: implements
+
+@enduml

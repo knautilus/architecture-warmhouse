@@ -1,0 +1,732 @@
+openapi: 3.1.0
+info:
+  title: API системы "Теплый дом"
+  version: 1.0.0
+  description: RESTful API для взаимодействия с микросервисами системы "Теплый дом"
+tags:
+  - name: houseService
+    description: Endpoints dealing with house.
+  - name: deviceService
+    description: Endpoints dealing with device.
+  - name: automationService
+    description: Endpoints dealing with automation.
+  - name: telemetryService
+    description: Endpoints dealing with telemetry.
+paths:
+  /houses:
+    get:
+      summary: Получить список домов
+      description: Возвращает список всех домов пользователя
+      operationId: getHouses
+      tags:
+        - houseService
+      responses:
+        "200":
+          description: Список домов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/House"
+        "400":
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+        - BearerJwt: []
+    post:
+      summary: Добавить новый дом
+      description: Регистрирует новый дом
+      operationId: createHouse
+      tags:
+        - houseService
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HouseCreateInput"
+      responses:
+        "201":
+          description: Дом создан
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/House"
+        "400":
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+        - BearerJwt: []
+  /devices:
+    get:
+      summary: Получить список устройств
+      description: Возвращает список устройств
+      operationId: getDevices
+      tags:
+        - deviceService
+      parameters:
+        - name: houseId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Список устройств
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Device"
+        "400":
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          description: Дом не найден
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+        - BearerJwt: []
+    post:
+      summary: Добавить новое устройство
+      description: Регистрирует новое устройство в доме
+      operationId: createDevice
+      tags:
+        - deviceService
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceCreateInput"
+      responses:
+        "201":
+          description: Устройство создано
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Device"
+        "400":
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+        - BearerJwt: []
+  /devices/{deviceId}:
+    parameters:
+      - $ref: "#/components/parameters/deviceId"
+    get:
+      tags:
+        - deviceService
+      summary: Получение устройства по Id
+      description: Получает устройство по Id
+      operationId: getDeviceById
+      responses:
+        "200":
+          description: Устройство
+          content:
+            application/json:
+              schema:
+                type: Device
+        "400":
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          description: Устройство не найдено
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+        - BearerJwt: []
+    delete:
+      tags:
+        - deviceService
+      summary: Удаление устройства
+      description: Удаляет устройство по Id
+      operationId: deleteDevice
+      parameters:
+        - $ref: "#/components/parameters/deviceId"
+      responses:
+        "200":
+          description: Успешно
+          content:
+            application/json:
+              schema:
+                type: "null"
+        "400":
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          description: Устройство не найдено
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+        - BearerJwt: []
+  /devices/{deviceId}/command:
+    post:
+      summary: Отправить команду на устройство
+      description: Отпраляет команду на устройство
+      operationId: createDeviceCommand
+      parameters:
+        - $ref: "#/components/parameters/deviceId"
+      tags:
+        - deviceService
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceCommand"
+      responses:
+        "201":
+          description: Команда отправлена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceCommand"
+        "400":
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+        - BearerJwt: []
+  /automationScenarios:
+    get:
+      summary: Получить список сценариев автоматизации
+      description: Возвращает список сценариев автоматизации
+      operationId: getAutomationScenarios
+      tags:
+        - automationService
+      responses:
+        "200":
+          description: Список сценариев автоматизации
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AutomationScenario"
+        "400":
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+        - BearerJwt: []
+    post:
+      summary: Добавить новый сценарий автоматизации
+      description: Регистрирует новый сценарий автоматизации
+      operationId: createAutomationScenario
+      tags:
+        - automationService
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AutomationScenarioCreateInput"
+      responses:
+        "201":
+          description: Сценарий автоматизации создан
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AutomationScenario"
+        "400":
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+        - BearerJwt: []
+  /telemetry:
+    get:
+      summary: Получить данные телеметрии
+      description: Возвращает данные телеметрии для устройства
+      operationId: getTelemetry
+      tags:
+        - telemetryService
+      security:
+        - BearerJwt: []
+      parameters:
+        - name: deviceId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+            examples:
+              - 0a684668-5a3d-420b-9793-f44fc00ca0bb
+          description: Идентификатор устройства
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+            examples:
+              - 0a684668-5a3d-420b-9793-f44fc00ca0bb
+          description: Тип телеметрии
+      responses:
+        "200":
+          description: Данные телеметрии
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Telemetry"
+        "400":
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  schemas:
+    House:
+      type: object
+      properties:
+        Id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: 0a684668-5a3d-420b-9793-f44fc00ca0bb
+        UserId:
+          type: string
+          format: uuid
+          example: 0a684668-5a3d-420b-9793-f44fc00ca0bb
+        Name:
+          type: string
+          example: Alex's house
+        Address:
+          type: string
+          example: Beverly Hills, 90210
+      required:
+        - Id
+        - UserId
+        - Name
+    HouseCreateInput:
+      type: object
+      properties:
+        UserId:
+          type: string
+          format: uuid
+          example: 0a684668-5a3d-420b-9793-f44fc00ca0bb
+        Name:
+          type: string
+          example: Alex's house
+        Address:
+          type: string
+          example: Beverly Hills, 90210
+      required:
+        - UserId
+        - Name
+    Device:
+      type: object
+      properties:
+        Id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: 0a684668-5a3d-420b-9793-f44fc00ca0bb
+        HouseId:
+          type: string
+          format: uuid
+          example: 0a684668-5a3d-420b-9793-f44fc00ca0bb
+        DeviceTypeId:
+          type: string
+          format: uuid
+          example: 0a684668-5a3d-420b-9793-f44fc00ca0bb
+        Name:
+          type: string
+          example: Heater
+        Location:
+          type: string
+          example: Bedroom
+        SerialNumber:
+          type: string
+          format: uuid
+          example: 2eaca2ff-f229-4f5f-91ae-490e382ffbd5
+        Parameters:
+          type: array
+          items:
+            $ref: "#/components/schemas/DeviceParameter"
+        IsEnabled:
+          type: boolean
+      required:
+        - Id
+        - HouseId
+        - DeviceTypeId
+        - Name
+        - SerialNumber
+        - IsEnabled
+    DeviceCreateInput:
+      type: object
+      properties:
+        HouseId:
+          type: string
+          format: uuid
+          example: 0a684668-5a3d-420b-9793-f44fc00ca0bb
+        DeviceTypeId:
+          type: string
+          format: uuid
+          example: 0a684668-5a3d-420b-9793-f44fc00ca0bb
+        Name:
+          type: string
+          example: Heater
+        Location:
+          type: string
+          example: Bedroom
+        SerialNumber:
+          type: string
+          format: uuid
+          example: 2eaca2ff-f229-4f5f-91ae-490e382ffbd5
+        Parameters:
+          type: array
+          items:
+            $ref: "#/components/schemas/DeviceParameter"
+        IsEnabled:
+          type: boolean
+      required:
+        - HouseId
+        - DeviceTypeId
+        - Name
+        - SerialNumber
+        - IsEnabled
+    DeviceParameter:
+      type: object
+      properties:
+        Id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: 2eaca2ff-f229-4f5f-91ae-490e382ffbd5
+        Name:
+          type: string
+          example: Temperature
+        Description:
+          type: string
+          example: Температура в градусах по Цельсию
+        ValueType:
+          type: string
+          enum:
+            - Number
+            - Bool
+            - String
+          example: Number
+      required:
+        - Id
+        - Name
+        - ValueType
+    AutomationScenario:
+      type: object
+      properties:
+        Id:
+          type: string
+          format: uuid
+          readOnly: true
+          examples:
+            - 0a684668-5a3d-420b-9793-f44fc00ca0bb
+        DeviceId:
+          type: string
+          format: uuid
+          examples:
+            - 0a684668-5a3d-420b-9793-f44fc00ca0bb
+        Name:
+          type: string
+          examples:
+            - Evening Light
+        Trigger:
+          type: string
+          examples: time eq 19:00
+        Action:
+          $ref: "#/components/schemas/DeviceCommand"
+      required:
+        - Id
+        - DeviceId
+        - Name
+        - Trigger
+        - Action
+    AutomationScenarioCreateInput:
+      type: object
+      properties:
+        DeviceId:
+          type: string
+          format: uuid
+          example: 0a684668-5a3d-420b-9793-f44fc00ca0bb
+        Name:
+          type: string
+          example: Evening Light
+        Trigger:
+          type: string
+          example: time eq 19:00
+        Action:
+          $ref: "#/components/schemas/DeviceCommand"
+      required:
+        - DeviceId
+        - Name
+        - Trigger
+        - Action
+    DeviceCommand:
+      type: object
+      properties:
+        DeviceParameterId:
+          type: string
+          format: uuid
+          example: 0a684668-5a3d-420b-9793-f44fc00ca0bb
+        Value:
+          type: string
+          example: 25
+      required:
+        - DeviceParameterId
+        - Value
+    Telemetry:
+      type: object
+      properties:
+        DeviceId:
+          type: string
+          format: uuid
+          example: 0a684668-5a3d-420b-9793-f44fc00ca0bb
+        Type:
+          type: string
+          example: Temperature
+        Data:
+          type: array
+          items:
+            type: object
+            properties:
+              Timestamp:
+                type: string
+                format: date-time
+              Value:
+                type: number
+                format: double
+      required:
+        - DeviceId
+        - Data
+  responses:
+    Conflict:
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - message
+            properties:
+              message:
+                type: string
+                examples:
+                  - Lorem ipsum
+      description: The request could not be completed due to a conflict with the
+        current state of the resource. Resolve the conflict and try again.
+    NotFound:
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - message
+            properties:
+              message:
+                type: string
+                examples:
+                  - Lorem ipsum
+      description: The server cannot find the requested resource. The endpoint may be
+        invalid or the resource may no longer exist.
+    BadRequest:
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - message
+            properties:
+              message:
+                type: string
+                examples:
+                  - Lorem ipsum
+      description: The server could not understand the request due to invalid syntax.
+        The client should modify the request and try again.
+    InternalServerErrror:
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - message
+            properties:
+              message:
+                type: string
+                examples:
+                  - Lorem ipsum
+      description: The server encountered an unexpected condition that prevented it
+        from fulfilling the request. Report the issue to the support team if it
+        persists.
+  parameters:
+    deviceId:
+      name: deviceId
+      in: path
+      description: Path parameter to retrieve devices by.
+      schema:
+        type: string
+        format: uuid
+        example: 0a684668-5a3d-420b-9793-f44fc00ca0bb
+      explode: false
+      style: simple
+      allowReserved: false
+      allowEmptyValue: true
+  securitySchemes:
+    BearerJwt:
+      type: http
+      scheme: Bearer
+      bearerFormat: Json Web Token (JWT)
+      description: "Jwt Auth: Authenticated requests contain a valid Json Web Token
+        (JWT) as part of the `Authorization: Bearer <JWT>` header."

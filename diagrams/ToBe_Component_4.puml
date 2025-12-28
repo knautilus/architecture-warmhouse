@@ -1,0 +1,26 @@
+@startuml
+
+title Диаграмма компонентов: Сервис телеметрии
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container(ApiGateway, "Api Gateway", "Шлюз для направления запросов на соответствующие сервисы")
+
+System_Ext(Sensor, "Датчик")
+SystemDb_Ext(TelemetryDb, "Telemetry DB", "Clickhouse", "Хранит данные телеметрии")
+
+Container_Boundary(TelemetryService, "Сервис телеметрии") {
+    Component(TelemetryController, "TelemetryController", "Обрабатывает запросы для получения телеметрии")
+    Component(SignalRegistrator, "Регистратор сигналов датчиков", "Обрабатывает показания датчиков")
+    Component(ServiceLayer, "Слой сервисов", "Бизнес-логика управления телеметрией")
+    Component(RepositoryLayer, "Слой репозиториев", "Работа с базой данных")
+}
+
+Rel(ApiGateway, TelemetryController, "Отправляет запросы")
+Rel(Sensor, SignalRegistrator, "Отправляет телеметрию")
+Rel(SignalRegistrator, ServiceLayer, "Обращается к бизнес-логике")
+Rel(TelemetryController, ServiceLayer, "Обращается к бизнес-логике")
+Rel(ServiceLayer, RepositoryLayer, "Читает и записывает данные")
+Rel(RepositoryLayer, TelemetryDb, "Читает и записывает данные")
+
+@enduml

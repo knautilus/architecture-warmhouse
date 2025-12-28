@@ -1,0 +1,78 @@
+@startuml
+
+title ER-диаграмма: Система 'Теплый дом'
+
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4.puml
+
+entity "User" {
+  *Id : string <<PK>>
+  --
+  Name : string
+  Email : string
+}
+
+entity "House" {
+  *Id : string <<PK>>
+  --
+  UserId : string <<FK>>
+  Name : string
+  Address : string
+}
+
+entity "Device" {
+  *Id : string <<PK>>
+  --
+  HouseId : string <<FK>>
+  DeviceTypeId : string <<FK>>
+  Name : string
+  SerialNumber : string
+  Location : string
+  IsEnabled : bool
+}
+
+entity "DeviceType" {
+  *Id : string <<PK>>
+  --
+  Name : string
+}
+
+entity "AutomationScenario" {
+  *Id : string <<PK>>
+  --
+  DeviceId : string <<FK>>
+  Name : string
+  Trigger : string
+  Action : DeviceCommand
+}
+
+entity "DeviceParameter" {
+  *Id : string <<PK>>
+  --
+  Name : string
+  Description : string 
+  ValueType : string
+}
+
+entity "DeviceCommand" {
+  DeviceParameterId : string <<FK>>
+  Value : string
+}
+
+entity "TelemetryData" {
+  *Id : string <<PK>>
+  --
+  DeviceId : string <<FK>>
+  Timestamp : DateTime
+  Parameter : string
+  Value : double
+}
+
+User ||--o{ House : has
+House ||--o{ Device : contains
+DeviceType ||--o{ Device : has
+Device ||--o{ AutomationScenario : has
+Device ||--o{ TelemetryData : produces
+Device ||--o{ DeviceParameter : has
+AutomationScenario ||--|| DeviceCommand : uses
+
+@enduml
