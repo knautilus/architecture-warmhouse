@@ -4,7 +4,7 @@ title Диаграмма компонентов: Сервис управлени
 
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
-SystemDb_Ext(SmartHomeDb, "SmartHome DB", "PostgreSQL", "Хранит данные о домах, подключенных устройствах, сценариях автоматизации")
+SystemDb_Ext(SmartHomeDb, "PostgreSQL DB", "Хранит данные о домах, подключенных устройствах, сценариях автоматизации")
 SystemQueue_Ext(Queue, "Брокер сообщений", "Обмен данными между сервисами")
 System_Ext(Device, "Контроллер устройства")
 

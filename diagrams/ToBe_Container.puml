@@ -17,8 +17,8 @@ Container_Boundary(SmartHome, "Система Теплый дом") {
     Container(DeviceManagement, "Сервис управления устройствами", "Управляет устройствами")
     Container(AutomationService, "Сервис автоматизации", "Обрабатывает сценарии автоматизациии и управляет устройствами")
     Container(TelemetryService, "Сервис телеметрии", "Обрабатывает данные телеметрии, сохраняет их, отдает по запросу")
-    ContainerDb(SmartHomeDb, "SmartHome DB", "PostgreSQL", "Хранит данные о домах, подключенных устройствах, сценариях автоматизации")
-    ContainerDb(TelemetryDb, "Telemetry DB", "Clickhouse", "Хранит данные телеметрии")
+    ContainerDb(SmartHomeDb, "PostgreSQL DB", "Хранит данные о домах, подключенных устройствах, сценариях автоматизации")
+    ContainerDb(TelemetryDb, "Clickhouse DB", "Хранит данные телеметрии")
     ContainerQueue(Queue, "Брокер сообщений", "Обмен данными между сервисами")
 }
 

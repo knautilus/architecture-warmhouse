@@ -7,7 +7,7 @@ title Диаграмма компонентов: Сервис телеметри
 Container(ApiGateway, "Api Gateway", "Шлюз для направления запросов на соответствующие сервисы")
 
 System_Ext(Sensor, "Датчик")
-SystemDb_Ext(TelemetryDb, "Telemetry DB", "Clickhouse", "Хранит данные телеметрии")
+SystemDb_Ext(TelemetryDb, "Clickhouse DB", "Хранит данные телеметрии")
 
 Container_Boundary(TelemetryService, "Сервис телеметрии") {
     Component(TelemetryController, "TelemetryController", "Обрабатывает запросы для получения телеметрии")

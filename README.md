@@ -1,4 +1,6 @@
-# Задание 1. Анализ и планирование
+# Проектная работа 1 спринта "Микросервисы и документирование решений"
+
+## Задание 1. Анализ и планирование
 
 ### 1. Описание функциональности монолитного приложения
 
@@ -42,37 +44,37 @@
 
 ### 5. Визуализация контекста системы — диаграмма С4
 
-[Визуализация контекста монолита](diagrams/AsIs_Context.puml)
+![Визуализация контекста монолита](diagrams/AsIs_Context.png)
 
-# Задание 2. Проектирование микросервисной архитектуры
+## Задание 2. Проектирование микросервисной архитектуры
 
 **Диаграмма контекста (Context)**
 
-[Визуализация контекста](diagrams/ToBe_Context.puml)
+![Визуализация контекста](diagrams/ToBe_Context.png)
 
 **Диаграмма контейнеров (Containers)**
 
-[Визуализация контейнеров](diagrams/ToBe_Container.puml)
+![Визуализация контейнеров](diagrams/ToBe_Container.png)
 
 **Диаграмма компонентов (Components)**
 
-[Визуализация компонентов 1](diagrams/ToBe_Component_1.puml)
+![Визуализация компонентов 1](diagrams/ToBe_Component_1.png)
 
-[Визуализация компонентов 2](diagrams/ToBe_Component_2.puml)
+![Визуализация компонентов 2](diagrams/ToBe_Component_2.png)
 
-[Визуализация компонентов 3](diagrams/ToBe_Component_3.puml)
+![Визуализация компонентов 3](diagrams/ToBe_Component_3.png)
 
-[Визуализация компонентов 4](diagrams/ToBe_Component_4.puml)
+![Визуализация компонентов 4](diagrams/ToBe_Component_4.png)
 
 **Диаграмма кода (Code)**
 
-[Визуализация кода](diagrams/ToBe_Code.puml)
+![Визуализация кода](diagrams/ToBe_Code.png)
 
-# Задание 3. Разработка ER-диаграммы
+## Задание 3. Разработка ER-диаграммы
 
-[ER-диаграмма](diagrams/ToBe_ER-diagram.puml)
+![ER-диаграмма](diagrams/ToBe_ER-diagram.png)
 
-# Задание 4. Создание и документирование API
+## Задание 4. Создание и документирование API
 
 ### 1. Тип API
 
@@ -82,7 +84,7 @@
 
 [Документация OpenAPI](docs/openapi.yaml)
 
-# Задание 5. Работа с docker и docker-compose
+## Задание 5. Работа с docker и docker-compose
 
 [docker-compose](apps/docker-compose.yml)
 

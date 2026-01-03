@@ -6,7 +6,7 @@ title Диаграмма компонентов: Сервис автоматиз
 
 Container(ApiGateway, "Api Gateway", "Шлюз для направления запросов на соответствующие сервисы")
 
-SystemDb_Ext(SmartHomeDb, "SmartHome DB", "PostgreSQL", "Хранит данные о домах, подключенных устройствах, сценариях автоматизации")
+SystemDb_Ext(SmartHomeDb, "PostgreSQL DB", "Хранит данные о домах, подключенных устройствах, сценариях автоматизации")
 SystemQueue_Ext(Queue, "Брокер сообщений", "Обмен данными между сервисами")
 
 Container_Boundary(AutomationService, "Сервис автоматизации") {
